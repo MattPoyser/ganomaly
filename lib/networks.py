@@ -69,12 +69,10 @@ class Encoder(nn.Module):
         self.main = main
 
     def forward(self, input):
-        print(input.size())
         if self.ngpu > 1:
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
         else:
             output = self.main(input)
-        raise AttributeError(output.size())
 
 ##
 class Decoder(nn.Module):
