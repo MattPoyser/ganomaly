@@ -40,7 +40,7 @@ class Encoder(nn.Module):
                         nn.LeakyReLU(0.2, inplace=True))
         csize, cndf = isize / 2, ndf
 
-        print("added init", csize, cndf)
+        # print("added init", csize, cndf)
 
         # Extra layers
         for t in range(n_extra_layers):
@@ -50,23 +50,23 @@ class Encoder(nn.Module):
                             nn.BatchNorm2d(cndf))
             main.add_module('extra-layers-{0}-{1}-relu'.format(t, cndf),
                             nn.LeakyReLU(0.2, inplace=True))
-        print("added extra layers")
+        # print("added extra layers")
 
         while csize > 4:
-            print(csize)
+            # print(csize)
             in_feat = cndf
             out_feat = cndf * 2
-            print("adding conv2d in while loop")
+            # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-conv'.format(in_feat, out_feat),
                             nn.Conv2d(in_feat, out_feat, 4, 2, 1, bias=False))
-            print("adding batchnorm2d in while loop")
+            # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(out_feat),
                             nn.BatchNorm2d(out_feat))
-            print("adding relu in while loop")
+            # print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(out_feat),
                             nn.LeakyReLU(0.2, inplace=True))
             cndf = cndf * 2
-            print(cndf)
+            # print(cndf)
             csize = csize / 2
 
         # state size. K x 4 x 4
@@ -91,10 +91,10 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.ngpu = ngpu
         assert isize % 16 == 0, "isize has to be a multiple of 16"
-        print("grep here, doing decoder")
+        # print("grep here, doing decoder")
 
         cngf, tisize = ngf // 2, 4
-        print(cngf, tisize)
+        # print(cngf, tisize)
         while tisize < isize:
             cngf = cngf * 2
             tisize = tisize * 2
@@ -110,18 +110,18 @@ class Decoder(nn.Module):
 
         csize, _ = 4, cngf
         while csize < isize // 2:
-            print(csize)
-            print("adding conv2d in while loop")
+            # print(csize)
+            # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-convt'.format(cngf, cngf // 2),
                             nn.ConvTranspose2d(cngf, cngf // 2, 4, 2, 1, bias=False))
-            print("adding batchnorm2d in while loop")
+            # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(cngf // 2),
                             nn.BatchNorm2d(cngf // 2))
-            print("adding relu in while loop")
+            # print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(cngf // 2),
                             nn.ReLU(True))
             cngf = cngf // 2
-            print(cngf)
+            # print(cngf)
             csize = csize * 2
 
         # Extra layers
@@ -132,13 +132,13 @@ class Decoder(nn.Module):
                             nn.BatchNorm2d(cngf))
             main.add_module('extra-layers-{0}-{1}-relu'.format(t, cngf),
                             nn.ReLU(True))
-        print("added extra layers")
+        # print("added extra layers")
 
         main.add_module('final-{0}-{1}-convt'.format(cngf, nc),
                         nn.ConvTranspose2d(cngf, nc, 4, 2, 1, bias=False))
         main.add_module('final-{0}-tanh'.format(nc),
                         nn.Tanh())
-        print("added init", csize, cngf)
+        # print("added init", csize, cngf)
         self.main = main
 
     def forward(self, input):
