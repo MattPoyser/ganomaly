@@ -101,6 +101,8 @@ class Decoder(nn.Module):
             tisize = tisize * 2
 
         main = nn.Sequential()
+        main.add_module('debug0', Debug())
+
         # input is Z, going into a convolution
         main.add_module('initial-{0}-{1}-convt'.format(nz, cngf),
                         nn.ConvTranspose2d(nz, cngf, 4, 1, 0, bias=False))
