@@ -94,9 +94,11 @@ class Decoder(nn.Module):
         print("grep here, doing decoder")
 
         cngf, tisize = ngf // 2, 4
-        while tisize != isize:
+        print(cngf, tisize)
+        while tisize < isize:
             cngf = cngf * 2
             tisize = tisize * 2
+        raise AttributeError("creating decoder")
 
         main = nn.Sequential()
         # input is Z, going into a convolution
@@ -109,7 +111,6 @@ class Decoder(nn.Module):
 
         csize, _ = 4, cngf
         while csize < isize // 2:
-            raise AttributeError("creating decoder")
             print(csize)
             print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-convt'.format(cngf, cngf // 2),
