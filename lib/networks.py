@@ -91,7 +91,7 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.ngpu = ngpu
         assert isize % 16 == 0, "isize has to be a multiple of 16"
-
+        raise AttributeError("creating decoder")
         print("grep here, doing decoder")
 
         cngf, tisize = ngf // 2, 4
