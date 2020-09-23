@@ -40,6 +40,8 @@ class Encoder(nn.Module):
                         nn.LeakyReLU(0.2, inplace=True))
         csize, cndf = isize / 2, ndf
 
+        print("added init", csize, cndf)
+
         # Extra layers
         for t in range(n_extra_layers):
             main.add_module('extra-layers-{0}-{1}-conv'.format(t, cndf),
@@ -48,17 +50,23 @@ class Encoder(nn.Module):
                             nn.BatchNorm2d(cndf))
             main.add_module('extra-layers-{0}-{1}-relu'.format(t, cndf),
                             nn.LeakyReLU(0.2, inplace=True))
+        print("added extra layers")
 
         while csize > 4:
+            print(csize)
             in_feat = cndf
             out_feat = cndf * 2
+            print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-conv'.format(in_feat, out_feat),
                             nn.Conv2d(in_feat, out_feat, 4, 2, 1, bias=False))
+            print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(out_feat),
                             nn.BatchNorm2d(out_feat))
+            print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(out_feat),
                             nn.LeakyReLU(0.2, inplace=True))
             cndf = cndf * 2
+            print(cndf)
             csize = csize / 2
 
         # state size. K x 4 x 4
