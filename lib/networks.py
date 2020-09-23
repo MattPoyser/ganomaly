@@ -109,6 +109,7 @@ class Decoder(nn.Module):
 
         csize, _ = 4, cngf
         while csize < isize // 2:
+            raise AttributeError("creating decoder")
             print(csize)
             print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-convt'.format(cngf, cngf // 2),
@@ -122,7 +123,6 @@ class Decoder(nn.Module):
             cngf = cngf // 2
             print(cngf)
             csize = csize * 2
-            raise AttributeError("creating decoder")
 
         # Extra layers
         for t in range(n_extra_layers):
