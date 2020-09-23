@@ -91,7 +91,6 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.ngpu = ngpu
         assert isize % 16 == 0, "isize has to be a multiple of 16"
-        raise AttributeError("creating decoder")
         print("grep here, doing decoder")
 
         cngf, tisize = ngf // 2, 4
@@ -123,6 +122,7 @@ class Decoder(nn.Module):
             cngf = cngf // 2
             print(cngf)
             csize = csize * 2
+            raise AttributeError("creating decoder")
 
         # Extra layers
         for t in range(n_extra_layers):
