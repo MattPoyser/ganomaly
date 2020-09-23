@@ -98,7 +98,6 @@ class Decoder(nn.Module):
         while tisize < isize:
             cngf = cngf * 2
             tisize = tisize * 2
-        raise AttributeError("creating decoder")
 
         main = nn.Sequential()
         # input is Z, going into a convolution
