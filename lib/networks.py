@@ -113,7 +113,7 @@ class Decoder(nn.Module):
                         nn.ReLU(True))
         main.add_module('debug1', Debug())
 
-        csize, _ = 4, cngf
+        csize, _ = 8, cngf # changed csize from 4 to 8 as per above change
         while csize < isize // 2:
             # print(csize)
             # print("adding conv2d in while loop")
