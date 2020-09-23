@@ -108,6 +108,7 @@ class Decoder(nn.Module):
                         nn.BatchNorm2d(cngf))
         main.add_module('initial-{0}-relu'.format(cngf),
                         nn.ReLU(True))
+        main.add_module('debug1', Debug())
 
         csize, _ = 4, cngf
         while csize < isize // 2:
@@ -115,12 +116,15 @@ class Decoder(nn.Module):
             # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-convt'.format(cngf, cngf // 2),
                             nn.ConvTranspose2d(cngf, cngf // 2, 4, 2, 1, bias=False))
+            main.add_module('debug{}-1'.format(csize), Debug())
             # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(cngf // 2),
                             nn.BatchNorm2d(cngf // 2))
+            main.add_module('debug{}-2'.format(csize), Debug())
             # print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(cngf // 2),
                             nn.ReLU(True))
+            main.add_module('debug{}-3'.format(csize), Debug())
             cngf = cngf // 2
             # print(cngf)
             csize = csize * 2
@@ -134,6 +138,7 @@ class Decoder(nn.Module):
             main.add_module('extra-layers-{0}-{1}-relu'.format(t, cngf),
                             nn.ReLU(True))
         # print("added extra layers")
+        main.add_module('debug2', Debug())
 
         main.add_module('final-{0}-{1}-convt'.format(cngf, nc),
                         nn.ConvTranspose2d(cngf, nc, 4, 2, 1, bias=False))
@@ -149,6 +154,16 @@ class Decoder(nn.Module):
             output = self.main(input)
         return output
 
+
+class Debug(nn.Module):
+    def __init__(self):
+        super(Debug, self).__init__()
+
+    def forward(self, x):
+        print(x.shape)
+        if x is None:
+            raise AttributeError("failed here")
+        return x
 
 ##
 class NetD(nn.Module):
