@@ -82,6 +82,7 @@ class Encoder(nn.Module):
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
         else:
             output = self.main(input)
+        return output
 
 ##
 class Decoder(nn.Module):
