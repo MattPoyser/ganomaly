@@ -163,7 +163,7 @@ class Debug(nn.Module):
         super(Debug, self).__init__()
 
     def forward(self, x):
-        print(x.shape)
+        # print(x.shape)
         if x is None:
             raise AttributeError("failed here")
         return x
