@@ -52,7 +52,8 @@ class Encoder(nn.Module):
                             nn.LeakyReLU(0.2, inplace=True))
         # print("added extra layers")
 
-        while csize > 4:
+        while csize > 8: # since we don't necessarily have multiples of 64 (e.g. 224), we can have csize reaching 7
+            # therefore csize can reach 3 (3.5) which is too small. therefore change csize>4 to csize>8
             # print(csize)
             in_feat = cndf
             out_feat = cndf * 2
