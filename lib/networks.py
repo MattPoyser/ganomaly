@@ -35,7 +35,7 @@ class Encoder(nn.Module):
         main = nn.Sequential()
         # input is nc x isize x isize
         main.add_module('initial-conv-{0}-{1}'.format(nc, ndf),
-                        nn.Conv2d(nc, ndf, 2, 2, 1, bias=False))
+                        nn.Conv2d(nc, ndf, 2, 2, 0, bias=False))
         main.add_module('initial-relu-{0}'.format(ndf),
                         nn.LeakyReLU(0.2, inplace=True))
         csize, cndf = isize / 2, ndf
@@ -59,7 +59,7 @@ class Encoder(nn.Module):
             out_feat = cndf * 2
             # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-conv'.format(in_feat, out_feat),
-                            nn.Conv2d(in_feat, out_feat, 2, 2, 1, bias=False))
+                            nn.Conv2d(in_feat, out_feat, 2, 2, 0, bias=False))
             # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(out_feat),
                             nn.BatchNorm2d(out_feat))
@@ -118,7 +118,7 @@ class Decoder(nn.Module):
             # print(csize)
             # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-convt'.format(cngf, cngf // 2),
-                            nn.ConvTranspose2d(cngf, cngf // 2, 2, 2, 1, bias=False))
+                            nn.ConvTranspose2d(cngf, cngf // 2, 2, 2, 0, bias=False))
             main.add_module('debug{}-1'.format(csize), Debug())
             # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(cngf // 2),
@@ -144,7 +144,7 @@ class Decoder(nn.Module):
         main.add_module('debug2', Debug())
 
         main.add_module('final-{0}-{1}-convt'.format(cngf, nc),
-                        nn.ConvTranspose2d(cngf, nc, 2, 2, 1, bias=False))
+                        nn.ConvTranspose2d(cngf, nc, 2, 2, 0, bias=False))
         main.add_module('final-{0}-tanh'.format(nc),
                         nn.Tanh())
         # print("added init", csize, cngf)
