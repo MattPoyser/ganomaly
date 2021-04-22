@@ -27,7 +27,7 @@ class Encoder(nn.Module):
     DCGAN ENCODER NETWORK
     """
 
-    def __init__(self, isize, nz, nc, ndf, ngpu, n_extra_layers=0, add_final_conv=True):
+    def __init__(self, isize, nz, nc, ndf, ngpu, n_extra_layers=0, add_final_conv=True, clim=8):
         super(Encoder, self).__init__()
         self.ngpu = ngpu
         assert isize % 16 == 0, "isize has to be a multiple of 16"
@@ -52,7 +52,7 @@ class Encoder(nn.Module):
                             nn.LeakyReLU(0.2, inplace=True))
         # print("added extra layers")
 
-        while csize > 8: # since we don't necessarily have multiples of 64 (e.g. 224), we can have csize reaching 7
+        while csize > clim: # since we don't necessarily have multiples of 64 (e.g. 224), we can have csize reaching 7
             # therefore csize can reach 3 (3.5) which is too small. therefore change csize>4 to csize>8
             # print(csize)
             in_feat = cndf
