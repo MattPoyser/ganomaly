@@ -33,12 +33,14 @@ class Encoder(nn.Module):
         assert isize % 16 == 0, "isize has to be a multiple of 16"
 
         main = nn.Sequential()
+        main.add_module('debug1', Debug())
         # input is nc x isize x isize
         main.add_module('initial-conv-{0}-{1}'.format(nc, ndf),
                         nn.Conv2d(nc, ndf, 2, 2, 0, bias=False))
         main.add_module('initial-relu-{0}'.format(ndf),
                         nn.LeakyReLU(0.2, inplace=True))
         csize, cndf = isize / 2, ndf
+        main.add_module('debug2', Debug())
 
         # print("added init", csize, cndf)
 
@@ -51,6 +53,7 @@ class Encoder(nn.Module):
             main.add_module('extra-layers-{0}-{1}-relu'.format(t, cndf),
                             nn.LeakyReLU(0.2, inplace=True))
         # print("added extra layers")
+        main.add_module('debug3', Debug())
 
         while csize > clim: # since we don't necessarily have multiples of 64 (e.g. 224), we can have csize reaching 7
             # therefore csize can reach 3 (3.5) which is too small. therefore change csize>4 to csize>8
@@ -66,6 +69,7 @@ class Encoder(nn.Module):
             # print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(out_feat),
                             nn.LeakyReLU(0.2, inplace=True))
+            main.add_module('debug', Debug())
             cndf = cndf * 2
             # print(cndf)
             csize = csize / 2
@@ -74,6 +78,7 @@ class Encoder(nn.Module):
         if add_final_conv:
             main.add_module('final-{0}-{1}-conv'.format(cndf, 1),
                             nn.Conv2d(cndf, nz, 2, 1, 0, bias=False))
+        main.add_module('debug4', Debug())
 
         self.main = main
 
