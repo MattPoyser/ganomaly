@@ -151,10 +151,12 @@ class Decoder(nn.Module):
         self.main = main
 
     def forward(self, input):
+        print("input shape", input.shape)
         if self.ngpu > 1:
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
         else:
             output = self.main(input)
+        print("output shape", output.shape)
         return output
 
 
