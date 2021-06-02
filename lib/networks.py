@@ -96,7 +96,7 @@ class Decoder(nn.Module):
     """
     DCGAN DECODER NETWORK
     """
-    def __init__(self, isize, nz, nc, ngf, ngpu, n_extra_layers=0):
+    def __init__(self, isize, nz, nc, ngf, ngpu, n_extra_layers=0, clim=8):
         super(Decoder, self).__init__()
         self.ngpu = ngpu
         assert isize % 16 == 0, "isize has to be a multiple of 16"
@@ -120,7 +120,7 @@ class Decoder(nn.Module):
                         nn.ReLU(True))
         main.add_module('debug1', Debug())
 
-        csize, _ = 8, cngf # changed csize from 4 to 8 as per above change
+        csize, _ = clim, cngf # changed csize from 4 to 8 as per above change
         while csize < isize // 2:
             # print(csize)
             # print("adding conv2d in while loop")
