@@ -60,11 +60,9 @@ class Encoder(nn.Module):
             # print(csize)
             in_feat = cndf
             out_feat = cndf * 2
-            print(in_feat, out_feat)
             # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-conv'.format(in_feat, out_feat),
                             nn.Conv2d(in_feat, out_feat, 2, 2, 0, bias=False))
-            print(main[-1])
             # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(out_feat),
                             nn.BatchNorm2d(out_feat))
@@ -73,7 +71,6 @@ class Encoder(nn.Module):
                             nn.LeakyReLU(0.2, inplace=True))
             main.add_module(f'debug{cndf}', Debug())
             cndf = cndf * 2
-            print(cndf, csize, clim)
             csize = csize / 2
 
         # state size. K x 4 x 4
@@ -158,12 +155,12 @@ class Decoder(nn.Module):
         self.main = main
 
     def forward(self, input):
-        print("input shape", input.shape)
+        # print("input shape", input.shape)
         if self.ngpu > 1:
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
         else:
             output = self.main(input)
-        print("output shape", output.shape)
+        # print("output shape", output.shape)
         return output
 
 
@@ -172,7 +169,7 @@ class Debug(nn.Module):
         super(Debug, self).__init__()
 
     def forward(self, x):
-        print(x.shape)
+        # print(x.shape)
         if x is None:
             raise AttributeError("failed here")
         return x
