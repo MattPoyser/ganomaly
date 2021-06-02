@@ -71,7 +71,7 @@ class Encoder(nn.Module):
                             nn.LeakyReLU(0.2, inplace=True))
             main.add_module('debug', Debug())
             cndf = cndf * 2
-            # print(cndf)
+            print(cndf, csize, clim)
             csize = csize / 2
 
         # state size. K x 4 x 4
