@@ -60,9 +60,11 @@ class Encoder(nn.Module):
             # print(csize)
             in_feat = cndf
             out_feat = cndf * 2
+            print(in_feat, out_feat)
             # print("adding conv2d in while loop")
             main.add_module('pyramid-{0}-{1}-conv'.format(in_feat, out_feat),
                             nn.Conv2d(in_feat, out_feat, 2, 2, 0, bias=False))
+            print(main[-1])
             # print("adding batchnorm2d in while loop")
             main.add_module('pyramid-{0}-batchnorm'.format(out_feat),
                             nn.BatchNorm2d(out_feat))
