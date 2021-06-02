@@ -71,7 +71,7 @@ class Encoder(nn.Module):
             # print("adding relu in while loop")
             main.add_module('pyramid-{0}-relu'.format(out_feat),
                             nn.LeakyReLU(0.2, inplace=True))
-            main.add_module('debug', Debug())
+            main.add_module(f'debug{cndf}', Debug())
             cndf = cndf * 2
             print(cndf, csize, clim)
             csize = csize / 2
